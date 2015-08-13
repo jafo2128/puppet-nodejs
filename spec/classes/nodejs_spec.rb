@@ -330,17 +330,21 @@ describe 'nodejs', :type => :class do
     operatingsystemmajrelease = osversions[0]
 
     if operatingsystemrelease =~ /^[5-7]\.(\d+)/
-      operatingsystem     = 'CentOS'
-      repo_baseurl        = "https://rpm.nodesource.com/pub/el/#{operatingsystemmajrelease}/\$basearch"
-      repo_source_baseurl = "https://rpm.nodesource.com/pub/el/#{operatingsystemmajrelease}/SRPMS"
-      repo_descr          = "Node.js Packages for Enterprise Linux #{operatingsystemmajrelease} - \$basearch"
-      repo_source_descr   = "Node.js for Enterprise Linux #{operatingsystemmajrelease} - \$basearch - Source"
+      operatingsystem        = 'CentOS'
+      repo_baseurl           = "https://rpm.nodesource.com/pub/el/#{operatingsystemmajrelease}/\$basearch"
+      repo_source_baseurl    = "https://rpm.nodesource.com/pub/el/#{operatingsystemmajrelease}/SRPMS"
+      repo_descr             = "Node.js Packages for Enterprise Linux #{operatingsystemmajrelease} - \$basearch"
+      repo_source_descr      = "Node.js for Enterprise Linux #{operatingsystemmajrelease} - \$basearch - Source"
+      repo_baseurl_12        = "https://rpm.nodesource.com/pub_0.12/el/#{operatingsystemmajrelease}/\$basearch"
+      repo_source_baseurl_12 = "https://rpm.nodesource.com/pub_0.12/el/#{operatingsystemmajrelease}/SRPMS"
     else
-      operatingsystem     = 'Fedora'
-      repo_baseurl        = "https://rpm.nodesource.com/pub/fc/#{operatingsystemmajrelease}/\$basearch"
-      repo_source_baseurl = "https://rpm.nodesource.com/pub/fc/#{operatingsystemmajrelease}/SRPMS"
-      repo_descr          = "Node.js Packages for Fedora Core #{operatingsystemmajrelease} - \$basearch"
-      repo_source_descr   = "Node.js for Fedora Core #{operatingsystemmajrelease} - \$basearch - Source"
+      operatingsystem        = 'Fedora'
+      repo_baseurl           = "https://rpm.nodesource.com/pub/fc/#{operatingsystemmajrelease}/\$basearch"
+      repo_source_baseurl    = "https://rpm.nodesource.com/pub/fc/#{operatingsystemmajrelease}/SRPMS"
+      repo_descr             = "Node.js Packages for Fedora Core #{operatingsystemmajrelease} - \$basearch"
+      repo_source_descr      = "Node.js for Fedora Core #{operatingsystemmajrelease} - \$basearch - Source"
+      repo_baseurl_12        = "https://rpm.nodesource.com/pub_0.12/fc/#{operatingsystemmajrelease}/\$basearch"
+      repo_source_baseurl_12 = "https://rpm.nodesource.com/pub_0.12/fc/#{operatingsystemmajrelease}/SRPMS"
     end
 
     context "when run on #{operatingsystem} release #{operatingsystemrelease}" do
@@ -381,6 +385,26 @@ describe 'nodejs', :type => :class do
 
             is_expected.to contain_yumrepo('nodesource-source').with({
               'baseurl' => repo_source_baseurl,
+              'descr'   => repo_source_descr,
+            })
+          end
+        end
+
+        context 'and repo_url_suffix set to pub_0.12' do
+          let :params do
+            default_params.merge!({
+              :repo_url_suffix => 'pub_0.12',
+            })
+          end
+
+          it 'the nodesource and nodesource-source repos should contain the right description and baseurl' do
+            is_expected.to contain_yumrepo('nodesource').with({
+              'baseurl' => repo_baseurl_12,
+              'descr'   => repo_descr,
+            })
+
+            is_expected.to contain_yumrepo('nodesource-source').with({
+              'baseurl' => repo_source_baseurl_12,
               'descr'   => repo_source_descr,
             })
           end
@@ -1064,10 +1088,12 @@ describe 'nodejs', :type => :class do
       }
     end
 
-    repo_baseurl        = 'https://rpm.nodesource.com/pub/el/7/$basearch'
-    repo_source_baseurl = 'https://rpm.nodesource.com/pub/el/7/SRPMS'
-    repo_descr          = 'Node.js Packages for Enterprise Linux 7 - $basearch'
-    repo_source_descr   = 'Node.js for Enterprise Linux 7 - $basearch - Source'
+    repo_baseurl           = 'https://rpm.nodesource.com/pub/el/7/$basearch'
+    repo_source_baseurl    = 'https://rpm.nodesource.com/pub/el/7/SRPMS'
+    repo_baseurl_12        = 'https://rpm.nodesource.com/pub_0.12/el/7/$basearch'
+    repo_source_baseurl_12 = 'https://rpm.nodesource.com/pub_0.12/el/7/SRPMS'
+    repo_descr             = 'Node.js Packages for Enterprise Linux 7 - $basearch'
+    repo_source_descr      = 'Node.js for Enterprise Linux 7 - $basearch - Source'
 
     # manage_package_repo
     context 'with manage_package_repo set to true' do
@@ -1098,6 +1124,26 @@ describe 'nodejs', :type => :class do
             'baseurl' => repo_source_baseurl,
             'descr'   => repo_source_descr,
           })
+        end
+      end
+
+      context 'and repo_url_suffix set to pub_0.12' do
+        let :params do
+          default_params.merge!({
+                                  :repo_url_suffix => 'pub_0.12',
+                                })
+        end
+
+        it 'the nodesource and nodesource-source repos should contain the right description and baseurl' do
+          is_expected.to contain_yumrepo('nodesource').with({
+                                                              'baseurl' => repo_baseurl_12,
+                                                              'descr'   => repo_descr,
+                                                            })
+
+          is_expected.to contain_yumrepo('nodesource-source').with({
+                                                                     'baseurl' => repo_source_baseurl_12,
+                                                                     'descr'   => repo_source_descr,
+                                                                   })
         end
       end
 
@@ -1364,10 +1410,12 @@ describe 'nodejs', :type => :class do
         }
       end
 
-    repo_baseurl        = 'https://rpm.nodesource.com/pub/el/7/$basearch'
-    repo_source_baseurl = 'https://rpm.nodesource.com/pub/el/7/SRPMS'
-    repo_descr          = 'Node.js Packages for Enterprise Linux 7 - $basearch'
-    repo_source_descr   = 'Node.js for Enterprise Linux 7 - $basearch - Source'
+    repo_baseurl           = 'https://rpm.nodesource.com/pub/el/7/$basearch'
+    repo_source_baseurl    = 'https://rpm.nodesource.com/pub/el/7/SRPMS'
+    repo_baseurl_12        = 'https://rpm.nodesource.com/pub_0.12/el/7/$basearch'
+    repo_source_baseurl_12 = 'https://rpm.nodesource.com/pub_0.12/el/7/SRPMS'
+    repo_descr             = 'Node.js Packages for Enterprise Linux 7 - $basearch'
+    repo_source_descr      = 'Node.js for Enterprise Linux 7 - $basearch - Source'
 
     # manage_package_repo
     context 'with manage_package_repo set to true' do
@@ -1398,6 +1446,26 @@ describe 'nodejs', :type => :class do
             'baseurl' => repo_source_baseurl,
             'descr'   => repo_source_descr,
           })
+        end
+      end
+
+      context 'and repo_url_suffix set to pub_0.12' do
+        let :params do
+          default_params.merge!({
+                                  :repo_url_suffix => 'pub_0.12',
+                                })
+        end
+
+        it 'the nodesource and nodesource-source repos should contain the right description and baseurl' do
+          is_expected.to contain_yumrepo('nodesource').with({
+                                                              'baseurl' => repo_baseurl_12,
+                                                              'descr'   => repo_descr,
+                                                            })
+
+          is_expected.to contain_yumrepo('nodesource-source').with({
+                                                                     'baseurl' => repo_source_baseurl_12,
+                                                                     'descr'   => repo_source_descr,
+                                                                   })
         end
       end
 

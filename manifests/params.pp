@@ -10,7 +10,6 @@ class nodejs::params {
   $repo_proxy                  = 'absent'
   $repo_proxy_password         = 'absent'
   $repo_proxy_username         = 'absent'
-  $repo_url_suffix             = 'node_0.10'
   $use_flags                   = ['npm', 'snapshot']
 
   # The full path to cmd.exe is required on Windows. The system32 fact is only
@@ -25,6 +24,7 @@ class nodejs::params {
       if $::operatingsystemrelease =~ /^6\.(\d+)/ {
         fail("The ${module_name} module is not supported on Debian Squeeze.")
       }
+      $repo_url_suffix             = 'node_0.10'
       if $::operatingsystemrelease =~ /^7\.(\d+)/ {
         $manage_package_repo       = true
         $nodejs_debug_package_name = 'nodejs-dbg'
@@ -78,6 +78,7 @@ class nodejs::params {
       }
     }
     'RedHat': {
+      $repo_url_suffix             = 'pub'
       if $::operatingsystemrelease =~ /^[5-7]\.(\d+)/ {
         $manage_package_repo       = true
         $nodejs_debug_package_name = 'nodejs-debuginfo'
@@ -121,6 +122,7 @@ class nodejs::params {
       $npm_package_name          = 'npm'
       $npm_path                  = '/usr/bin/npm'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
     }
     'Archlinux': {
       $manage_package_repo       = false
@@ -131,6 +133,7 @@ class nodejs::params {
       $npm_package_name          = 'npm'
       $npm_path                  = '/usr/bin/npm'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
     }
     'FreeBSD': {
       $manage_package_repo       = false
@@ -141,6 +144,7 @@ class nodejs::params {
       $npm_package_name          = 'www/npm'
       $npm_path                  = '/usr/bin/npm'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
     }
     'OpenBSD': {
       $manage_package_repo       = false
@@ -151,6 +155,7 @@ class nodejs::params {
       $npm_package_name          = undef
       $npm_path                  = '/usr/local/bin/npm'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
     }
     'Darwin': {
       $manage_package_repo       = false
@@ -161,6 +166,7 @@ class nodejs::params {
       $npm_package_name          = 'npm'
       $npm_path                  = '/opt/local/bin/npm'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
       Package { provider => 'macports' }
     }
     'Windows': {
@@ -172,6 +178,7 @@ class nodejs::params {
       $npm_package_name          = 'npm'
       $npm_path                  = '"C:\Program Files\nodejs\npm.cmd"'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
       Package { provider => 'chocolatey' }
     }
     # Gentoo was added as its own $::osfamily in Facter 1.7.0
@@ -184,9 +191,10 @@ class nodejs::params {
       $npm_package_name          = undef
       $npm_path                  = '/usr/bin/npm'
       $repo_class                = undef
+      $repo_url_suffix           = 'node_0.10'
     }
     'Linux': {
-    # Before Facter 1.7.0 Gentoo did not have its own $::osfamily
+      # Before Facter 1.7.0 Gentoo did not have its own $::osfamily
       case $::operatingsystem {
         'Gentoo': {
           $manage_package_repo       = false
@@ -197,6 +205,7 @@ class nodejs::params {
           $npm_package_name          = undef
           $npm_path                  = '/usr/bin/npm'
           $repo_class                = undef
+          $repo_url_suffix           = 'node_0.10'
         }
         'Amazon': {
           # this is here only for historical reasons:
@@ -209,6 +218,7 @@ class nodejs::params {
           $npm_package_name          = 'npm'
           $npm_path                  = '/usr/bin/npm'
           $repo_class                = '::nodejs::repo::nodesource'
+          $repo_url_suffix           = 'pub'
         }
 
         default: {
